@@ -3,6 +3,7 @@ from contextlib import asynccontextmanager
 from motor.motor_asyncio import AsyncIOMotorClient
 from app.core.config import settings
 from app.database import db
+from app.routes import auth_routes
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -22,6 +23,9 @@ async def lifespan(app: FastAPI):
     print("🔻 Disconnected from MongoDB")
 
 app = FastAPI(title="CampusConnect API", lifespan=lifespan)
+
+# Register the router
+app.include_router(auth_routes.router, prefix="/api/auth", tags=["Authentication"])
 
 @app.get("/")
 def read_root():
