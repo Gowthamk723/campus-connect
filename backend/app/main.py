@@ -4,6 +4,8 @@ from motor.motor_asyncio import AsyncIOMotorClient
 from app.core.config import settings
 from app.database import db
 from app.routes import auth_routes
+from fastapi.middleware.cors import CORSMiddleware
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -23,6 +25,14 @@ async def lifespan(app: FastAPI):
     print("🔻 Disconnected from MongoDB")
 
 app = FastAPI(title="CampusConnect API", lifespan=lifespan)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"], # Allow React
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Register the router
 app.include_router(auth_routes.router, prefix="/api/auth", tags=["Authentication"])
