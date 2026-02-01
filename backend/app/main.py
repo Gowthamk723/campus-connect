@@ -3,7 +3,7 @@ from contextlib import asynccontextmanager
 from motor.motor_asyncio import AsyncIOMotorClient
 from app.core.config import settings
 from app.database import db
-from app.routes import auth_routes
+from app.routes import auth_routes, ai
 from fastapi.middleware.cors import CORSMiddleware
 
 
@@ -36,6 +36,7 @@ app.add_middleware(
 
 # Register the router
 app.include_router(auth_routes.router, prefix="/api/auth", tags=["Authentication"])
+app.include_router(ai.router) # <--- Added this line! (It creates the /analyze endpoint)
 
 @app.get("/")
 def read_root():
