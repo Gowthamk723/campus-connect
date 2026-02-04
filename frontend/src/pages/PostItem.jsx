@@ -4,6 +4,14 @@ import api from '../services/api';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/useAuth';
 
+// 👇 1. Added Helper Function (Outside Component)
+const toTitleCase = (str) => {
+  return str.replace(
+    /\w\S*/g,
+    (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
+  );
+};
+
 const PostItem = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -22,7 +30,7 @@ const PostItem = () => {
     date_lost: new Date().toISOString().split('T')[0]
   });
 
-  // 🧠 AI Analysis Function
+  // 🧠 2. Updated AI Analysis Function (Improved Cleanup Logic)
   const handleAnalyze = async (selectedFile) => {
     setAnalyzing(true);
     try {
@@ -34,16 +42,29 @@ const PostItem = () => {
       });
 
       if (response.data.description) {
+        let rawDescription = response.data.description;
+        let cleanTitle = rawDescription;
+
+        // Remove "Found: " or "Lost: " prefix if AI added it
+        cleanTitle = cleanTitle.replace(/^(found|lost):\s*/i, "");
+        
+        // Take first 4 words for title
+        cleanTitle = cleanTitle.split(' ').slice(0, 4).join(' ');
+
+        // Apply Title Case
+        cleanTitle = toTitleCase(cleanTitle);
+
         setFormData(prev => ({
           ...prev,
-          description: response.data.description,
-          title: response.data.title || "Found: " + response.data.description.split(' ').slice(0, 3).join(' ') + "...",
-          category: response.data.category || prev.category // Use AI category if available
+          description:
+            rawDescription.charAt(0).toUpperCase() +
+            rawDescription.slice(1),
+          title: cleanTitle,
+          category: prev.category
         }));
       }
     } catch (error) {
       console.error("AI Error:", error);
-      // Optional: don't alert here to avoid annoying popups if it fails silently
     } finally {
       setAnalyzing(false);
     }
@@ -55,7 +76,6 @@ const PostItem = () => {
     if (file) {
       setImage(file);
       setPreview(URL.createObjectURL(file));
-      // 👇 Auto-trigger analysis immediately
       handleAnalyze(file);
     }
   };
@@ -106,7 +126,7 @@ const PostItem = () => {
 
       <div className="bg-slate-800 rounded-2xl p-8 border border-slate-700 shadow-xl">
         
-        {/* Image Upload Area - Styled */}
+        {/* Image Upload Area */}
         <div className="mb-8 relative border-2 border-dashed border-slate-600 rounded-xl p-4 text-center hover:bg-slate-700/50 transition-colors group">
           <input 
             type="file" 
@@ -119,7 +139,6 @@ const PostItem = () => {
             <div className="relative inline-block z-10">
               <img src={preview} alt="Preview" className="max-h-64 rounded-lg shadow-lg border border-slate-600 mx-auto" />
               
-              {/* 🧠 Magic AI Overlay */}
               {analyzing && (
                 <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center rounded-lg backdrop-blur-sm">
                   <Sparkles className="text-yellow-400 animate-spin mb-2" size={40} />
@@ -136,7 +155,6 @@ const PostItem = () => {
           )}
         </div>
 
-        {/* The Form */}
         <form onSubmit={handleSubmit} className="space-y-6">
           
           <div>

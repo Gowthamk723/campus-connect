@@ -50,10 +50,11 @@ async def create_item(
     # 3. Save to 'campus_connect_db'
     result = await db.client.campus_connect_db.items.insert_one(new_item)
 
-    # Manually attach the ID and return immediately
+    # Attach the ID and return immediately
     new_item["_id"] = str(result.inserted_id)
 
     return new_item
+
 
 @router.get("/", response_model=list[ItemResponse])
 async def get_items():
@@ -65,20 +66,18 @@ async def get_items():
         
     return items
 
-# 👇 This is the new endpoint causing the error (Fixed now)
+
 @router.get("/user/me", response_model=list[ItemResponse])
 async def get_my_items(current_user: dict = Depends(get_current_user)):
-    # 1. We know the user's email from the token (current_user["email"])
-    # 2. Find items where 'owner_id' matches their email
     items = await db.client.campus_connect_db.items.find(
         {"owner_id": current_user["email"]}
     ).to_list(100)
     
-    # 3. Convert ObjectIds
     for item in items:
         item["_id"] = str(item["_id"])
         
     return items
+
 
 @router.get("/{item_id}", response_model=ItemResponse)
 async def get_item(item_id: str):
@@ -97,6 +96,7 @@ async def get_item(item_id: str):
     item["_id"] = str(item["_id"])
     return item
 
+
 @router.delete("/{item_id}")
 async def delete_item(item_id: str, current_user: dict = Depends(get_current_user)):
     # 1. Validate ID
@@ -108,9 +108,12 @@ async def delete_item(item_id: str, current_user: dict = Depends(get_current_use
     if not item:
         raise HTTPException(status_code=404, detail="Item not found")
         
-    # 3. SECURITY CHECK: Does the logged-in user own this item?
-    # We compare the item's 'owner_id' (email) with the token's email
-    if item["owner_id"] != current_user["email"]:
+    # 3. SECURITY CHECK:
+    # Allow if Owner OR Admin
+    is_owner = item["owner_id"] == current_user["email"]
+    is_admin = current_user.get("role") == "admin"  # 👈 Check Role
+
+    if not is_owner and not is_admin:
         raise HTTPException(status_code=403, detail="Not authorized to delete this item")
     
     # 4. Delete it

@@ -8,7 +8,7 @@ from app.database import db
 import os
 
 # Import Routes
-from app.routes import auth_routes, ai, items 
+from app.routes import auth_routes, items, ai, messages
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -53,6 +53,7 @@ app.add_middleware(
 app.include_router(auth_routes.router, prefix="/api/auth", tags=["Auth"])
 app.include_router(ai.router)
 app.include_router(items.router, prefix="/items", tags=["Items"])
+app.include_router(messages.router, prefix="/messages", tags=["Messages"])
 
 @app.get("/")
 def read_root():

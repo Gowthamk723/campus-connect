@@ -1,44 +1,98 @@
-import { MapPin, Calendar } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { MapPin, Calendar, Trash2 } from 'lucide-react';
+import { useAuth } from '../context/useAuth';
+import api from '../services/api';
 
-const ItemCard = ({ item }) => {
-  // Construct image URL (points to your local backend folder)
+const ItemCard = ({ item, onDelete }) => {
+  const { user } = useAuth();
+  
+  // Check if current user is Admin
+  const isAdmin = user?.role === 'admin';
+
+  // Construct image URL (fallback included)
   const imageUrl = item.image_url 
     ? `http://localhost:8000${item.image_url}` 
     : 'https://via.placeholder.com/400x300?text=No+Image';
 
-  return (
-    <Link 
-      to={`/items/${item._id}`} 
-      className="block bg-slate-800 rounded-xl overflow-hidden border border-slate-700 shadow-lg hover:shadow-2xl transition-all hover:-translate-y-1"
-    >
-      <div className="h-48 overflow-hidden relative group">
-        <img 
-          src={imageUrl} 
-          alt={item.title} 
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-        />
-        <div className={`absolute top-2 right-2 text-xs px-2 py-1 rounded-full backdrop-blur-sm text-white ${item.category === 'Lost' ? 'bg-red-500/80' : 'bg-green-500/80'}`}>
-          {item.category}
-        </div>
-      </div>
+  const handleDeleteClick = async (e) => {
+    e.preventDefault(); // Stop navigation
 
-      <div className="p-4">
-        <h3 className="text-xl font-bold text-white mb-2 truncate">{item.title}</h3>
-        <p className="text-slate-400 text-sm mb-4 line-clamp-2">{item.description}</p>
+    if (window.confirm("Admin Action: Delete this post?")) {
+      try {
+        await api.delete(`/items/${item._id}`);
+
+        // 👇 Use onDelete if parent provided it
+        if (onDelete) {
+          onDelete(item._id);
+        } else {
+          window.location.reload(); // fallback
+        }
+
+      } catch (err) {
+        alert("Failed to delete");
+        console.log(err);
+      }
+    }
+  };
+
+  return (
+    <div className="relative group">
+      
+      <Link 
+        to={`/items/${item._id}`} 
+        className="block bg-slate-800 rounded-xl overflow-hidden border border-slate-700 shadow-lg hover:shadow-2xl transition-all hover:-translate-y-1 h-full flex flex-col"
+      >
         
-        <div className="flex items-center justify-between text-xs text-slate-500 mt-4 border-t border-slate-700 pt-3">
-          <div className="flex items-center gap-1">
-            <MapPin size={14} className="text-blue-500" />
-            {item.location}
-          </div>
-          <div className="flex items-center gap-1">
-            <Calendar size={14} className="text-purple-500" />
-            {item.date_lost}
+        {/* Image Section */}
+        <div className="h-48 overflow-hidden bg-slate-900 relative">
+          <img 
+            src={imageUrl}
+            alt={item.title} 
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+          />
+          
+          {/* Category Badge */}
+          <div className="absolute top-3 right-3">
+            <span className={`px-3 py-1 rounded-full text-xs font-bold shadow-md ${
+              item.category === 'Lost' 
+                ? 'bg-red-500 text-white' 
+                : 'bg-green-500 text-white'
+            }`}>
+              {item.category}
+            </span>
           </div>
         </div>
-      </div>
-    </Link>
+
+        {/* Content Section */}
+        <div className="p-5 flex flex-col flex-grow">
+          <h3 className="text-xl font-bold text-white mb-2 line-clamp-1">
+            {item.title}
+          </h3>
+
+          <div className="flex items-center gap-2 text-slate-400 text-sm mb-3">
+            <MapPin size={16} className="text-blue-400" />
+            <span className="truncate">{item.location}</span>
+          </div>
+
+          <div className="flex items-center gap-2 text-slate-500 text-xs mt-auto pt-3 border-t border-slate-700/50">
+            <Calendar size={14} />
+            <span>{item.date_lost}</span>
+          </div>
+        </div>
+
+      </Link>
+
+      {/* ADMIN DELETE BUTTON */}
+      {isAdmin && (
+        <button
+          onClick={handleDeleteClick}
+          className="absolute top-2 left-2 bg-red-600 text-white p-2 rounded-full shadow-lg hover:bg-red-700 z-20 transition-transform hover:scale-110"
+          title="Admin Delete"
+        >
+          <Trash2 size={16} />
+        </button>
+      )}
+    </div>
   );
 };
 

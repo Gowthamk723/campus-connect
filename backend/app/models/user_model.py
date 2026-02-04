@@ -18,6 +18,7 @@ class UserResponse(BaseModel):
     id: str
     username: str
     email: EmailStr
+    role: str = "user"
     
     class Config:
         # This helps map MongoDB "_id" to "id"

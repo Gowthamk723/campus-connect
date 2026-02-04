@@ -2,20 +2,31 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import Navbar from './components/Navbar';
 import { AuthProvider } from './context/AuthContext'; 
 import { useAuth } from './context/useAuth'; 
+
+// Pages
 import Login from './pages/Login';
-import PostItem from './pages/PostItem';
-import Home from './pages/Home';
-import Landing from './pages/Landing';
 import Register from './pages/Register';
+import Landing from './pages/Landing';
+import Home from './pages/Home';
+import PostItem from './pages/PostItem';
 import ItemDetail from './pages/ItemDetail';
 import Profile from './pages/Profile';
+import ChatPage from './pages/ChatPage';
+import Inbox from './pages/Inbox';
+import AdminChatLog from './pages/AdminChatLog'; // 👈 Import Admin Page
 
+// 🔒 Security Wrapper
+// If not logged in, redirects to Landing page
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
-  if (loading) return <div>Loading...</div>;
-  return user ? children : <Navigate to="/login" replace />;
+  
+  if (loading) return <div className="text-white text-center p-20">Loading...</div>;
+  
+  return user ? children : <Navigate to="/landing" replace />;
 };
 
+// 🏠 Root Logic
+// If logged in -> Home Feed. If Guest -> Landing Page.
 const RootRoute = () => {
   const { user, loading } = useAuth();
   if (loading) return <div></div>;
@@ -29,10 +40,22 @@ function App() {
         <div className="min-h-screen bg-slate-900 text-slate-100 font-sans">
           <Navbar />
           <Routes>
+            {/* 🔓 PUBLIC ROUTES */}
             <Route path="/" element={<RootRoute />} />
+            <Route path="/landing" element={<Landing />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/items/:id" element={<ItemDetail />} />
+
+            {/* 🔒 PROTECTED ROUTES (Features) */}
+            <Route 
+              path="/items/:id" 
+              element={
+                <ProtectedRoute>
+                  <ItemDetail />
+                </ProtectedRoute>
+              } 
+            />
+            
             <Route 
               path="/post" 
               element={
@@ -41,6 +64,7 @@ function App() {
                 </ProtectedRoute>
               } 
             />
+            
             <Route 
               path="/profile" 
               element={
@@ -49,6 +73,39 @@ function App() {
                 </ProtectedRoute>
               } 
             />
+            
+            {/* 💬 Chat System */}
+            <Route 
+              path="/chat/:email" 
+              element={
+                <ProtectedRoute>
+                  <ChatPage />
+                </ProtectedRoute>
+              } 
+            />
+            
+            <Route 
+              path="/inbox" 
+              element={
+                <ProtectedRoute>
+                  <Inbox />
+                </ProtectedRoute>
+              } 
+            />
+
+            {/* 👮 Admin Route */}
+            <Route 
+              path="/admin/logs" 
+              element={
+                <ProtectedRoute>
+                  <AdminChatLog />
+                </ProtectedRoute>
+              } 
+            />
+
+            {/* Catch-all: Redirect unknown URLs to Root */}
+            <Route path="*" element={<Navigate to="/" />} />
+
           </Routes>
         </div>
       </Router>
