@@ -1,198 +1,154 @@
-# CampusConnect - AI-Powered Lost & Found
+# 🎓 Campus Lost & Found (CampusConnect)
 
-CampusConnect is a full-stack web application designed to streamline the process of reporting and recovering lost items on campus. It leverages an **AI Image Captioning Model (BLIP)** hosted on **Google Colab** to automatically generate item titles and descriptions from uploaded images. The platform also features a **Real-Time Chat System** for secure communication and includes a robust **Admin Dashboard** for moderation.
+[![Deploy Status](https://img.shields.io/badge/Vercel-Live-green?style=for-the-badge&logo=vercel)](https://campus-lost-found-nine.vercel.app/
+)
+[![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi)](https://fastapi.tiangolo.com/)
+[![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://reactjs.org/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white)](https://www.mongodb.com/)
 
----
+**CampusConnect** is a full-stack, AI-powered web application designed to streamline the process of reporting and recovering lost items on college campuses. 
 
-## Key Features
+By leveraging a custom AI Image Captioning Model (BLIP), the platform automatically generates highly accurate titles and descriptions from user-uploaded images, removing friction from the reporting process. It also features real-time, secure communication and a comprehensive administrative dashboard.
 
-- **AI Auto-Generation (BLIP Model):** Upload an image, and the AI automatically generates a meaningful title and description.
-- **Secure Real-Time Chat:** Users can chat with item owners instantly via a private inbox without sharing personal phone numbers.
-- **Admin Dashboard:** Dedicated admin role to view security logs, monitor chats, and delete any post.
-- **Fully Responsive:** Optimized UI for Mobile, Tablet, and Desktop.
-- **Authentication:** Secure JWT-based Login and Registration.
-
----
-
-## Tech Stack
-
-**Frontend:** React, Tailwind CSS, Lucide React, Axios  
-**Backend:** FastAPI (Python), Motor (MongoDB Async Driver)  
-**Database:** MongoDB  
-**AI Service:** BLIP Image Captioning Model (Hosted via Google Colab + Ngrok)
+🚀 **[View Live Demo Here](https://campus-lost-found-nine.vercel.app/
+)** *(Note: The AI auto-captioning feature requires the backend Colab instance to be active).*
 
 ---
 
-## AI Architecture
+## ✨ Key Features
 
-- Image uploaded from React frontend
-- Sent to FastAPI backend
-- Forwarded to Google Colab API endpoint (via Ngrok)
-- BLIP model generates:
-  - Title
-  - Description
-- Backend stores generated data in MongoDB
+* **🤖 AI Auto-Generation (BLIP Model):** Upload an image, and the integrated AI automatically generates a meaningful, searchable title and description.
+* **🎨 Modern, Animated UI:** Fully responsive frontend built with Tailwind CSS, Radix UI primitives, and Framer Motion for smooth, accessible interactions (including a Bento Grid layout and Dark Mode support).
+* **💬 Secure Real-Time Chat:** Users can coordinate item returns instantly via a private inbox, protecting personal phone numbers and emails.
+* **🛡️ Role-Based Admin Dashboard:** Dedicated admin portal to monitor system security logs, moderate chats, and delete inappropriate posts.
+* **🔐 JWT Authentication:** Secure, token-based login and registration flows.
 
 ---
 
-## Installation & Setup Guide
+## 🛠️ Tech Stack
+
+**Frontend:**
+* React (Vite)
+* Tailwind CSS
+* Radix UI & Shadcn Components
+* Framer Motion (Animations)
+* Axios
+
+**Backend & Database:**
+* FastAPI (Python)
+* MongoDB (Motor Async Driver)
+* JWT Authentication
+
+**AI & Deployment:**
+* BLIP Image Captioning Model (Hosted via Google Colab + Ngrok)
+* **Frontend Hosting:** Vercel
+* **Backend Hosting:** Render
+
+---
+
+## 💻 Local Installation & Setup
 
 ### Prerequisites
+* Node.js (v18+)
+* Python (v3.10+)
+* MongoDB (Atlas)
+* Git
 
-Ensure you have the following installed:
-
-- Node.js (v18+)
-- Python (v3.10+)
-- MongoDB (Local or Atlas)
-- Git
-
----
-
-### Clone the Repository
-
+### 1. Clone the Repository
 ```bash
-git clone <YOUR_GITHUB_REPO_URL_HERE>
+git clone [https://github.com/Gowthamk723/campus-connect.git](https://github.com/Gowthamk723/campus-connect.git)
 cd campus-connect
-```
+2. Start the AI Service (Google Colab)
+Since the BLIP model runs on a free GPU to process images:
 
----
+Open the BLIP Google Colab Notebook.
 
-### Start the AI Service (Google Colab)
+Go to Runtime → Change runtime type → Select T4 GPU.
 
-Since the BLIP model runs on a free GPU:
+Run all cells.
 
-1. Open your BLIP Google Colab Notebook.
-2. Go to **Runtime → Change runtime type → Select T4 GPU**.
-3. Run all cells.
-4. Copy the **Ngrok Public URL** generated.
-   Example:
-   ```
-   https://xxxx-xxxx.ngrok-free.app/analyze
-   ```
-5. Keep the Colab tab OPEN while using the app.
+Copy the Ngrok Public URL generated (e.g., https://xxxx-xxxx.ngrok-free.app/analyze).
+Note: Keep the Colab tab open while using the app.
 
----
+3. Backend Setup
+Open a new terminal and navigate to the backend directory:
 
-### Backend Setup
-
-```bash
+Bash
 cd backend
-```
-
-#### Create Virtual Environment
-
-```bash
 python -m venv venv
-```
+Activate the virtual environment:
 
-Activate:
+Windows: venv\Scripts\activate
 
-Windows:
-```bash
-venv\Scripts\activate
-```
+Mac/Linux: source venv/bin/activate
 
-Mac/Linux:
-```bash
-source venv/bin/activate
-```
+Install dependencies and set up environment:
 
-#### Install Dependencies
-
-```bash
+Bash
 pip install -r requirements.txt
-```
+Create a .env file inside the /backend folder:
 
-#### Create `.env` file inside backend folder
-
-```env
-Option 1: If using Local MongoDB (installed on your system)
-MONGO_URL=mongodb://localhost:27017
-
-Option 2: If using MongoDB Atlas (Cloud) 
-Replace <username>, <password>, and <cluster-url>
+Code snippet
 MONGO_URL=mongodb+srv://<username>:<password>@cluster0.xxxxx.mongodb.net
-
 DB_NAME=campus_connect_db
-SECRET_KEY=your_secret_key_here
+SECRET_KEY=your_super_secret_key_here
 ALGORITHM=HS256
 ACCESS_TOKEN_EXPIRE_MINUTES=30
 
 # Paste your Colab Ngrok URL here:
-COLAB_AI_URL=https://xxxx-xxxx.ngrok-free.app/analyze
-```
+COLAB_AI_URL=[https://xxxx-xxxx.ngrok-free.app/analyze](https://xxxx-xxxx.ngrok-free.app/analyze)
 
-#### Create Admin User
+# Allow CORS for local frontend
+FRONTEND_URL=http://localhost:5173
+Initialize Admin and Start Server:
 
-```bash
+Bash
 python create_admin.py
-```
-
-#### Start Backend
-
-```bash
 uvicorn app.main:app --reload
-```
+Backend runs at: http://localhost:8000
 
-Backend runs at:
-http://localhost:8000
+4. Frontend Setup
+Open a new terminal and navigate to the frontend directory:
 
----
-
-### Frontend Setup
-
-```bash
+Bash
 cd frontend
 npm install
+Create a .env file inside the /frontend folder:
+
+Code snippet
+VITE_API_URL=http://localhost:8000
+Start the development server:
+
+Bash
 npm run dev
-```
+Frontend runs at: http://localhost:5173
 
-Frontend runs at:
-http://localhost:5173
+👥 User Roles & Access
+Regular User:
 
----
+Post lost/found items with AI assistance.
 
-## User Roles
+Chat privately with other users.
 
-### Regular User
-- Post lost/found items
-- Chat with other users
-- Manage their own posts
+Manage personal post history.
 
-### Admin
-- Delete any post
-- Monitor chats
-- View system logs
+Admin:
 
----
+Full moderation access (Delete any post).
 
-## Default Admin Credentials
+Monitor chat logs for safety.
 
-If you ran `create_admin.py`:
+View system security logs.
 
-Email:
-```
-admin@campusconnect.com
-```
+Default Admin Credentials (if create_admin.py was run):
 
-Password:
-```
-admin123
-```
+Email: admin@campusconnect.com
 
----
+Password: admin
 
-## Important Notes
+🚀 Roadmap & Future Improvements
+[ ] Replace polling chat with native WebSockets.
 
-- Keep Google Colab running while using AI feature.
-- MongoDB must be running before starting backend.
-- Admin features are role-based and protected.
+[ ] Migrate BLIP model from Colab to a dedicated cloud GPU server.
 
----
-
-## Future Improvements
-
-- Replace polling chat with WebSockets
-- Deploy BLIP model to a dedicated cloud server
-- Add AI-based image moderation
-- Deploy full stack to AWS / Render / Vercel
+[ ] Implement automated AI-based image moderation for inappropriate content.
