@@ -23,7 +23,7 @@ export default function AppNavbar() {
 
   const isActive = (path) => location.pathname === path;
 
-  // Nav menus strictly based on original logic
+  
   const menuItems = [
     { title: "Home Feed", url: "/", icon: <Home className="size-4 shrink-0" /> },
   ];
@@ -42,7 +42,7 @@ export default function AppNavbar() {
   return (
     <section className="py-4 fixed top-0 w-full z-50 bg-black/80 backdrop-blur-md border-b border-gray-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Desktop Navbar */}
+        
         <nav className="hidden justify-between md:flex items-center">
           <div className="flex items-center gap-6">
             <Link to="/" className="flex items-center gap-2 text-2xl font-black font-heading text-white">
@@ -89,7 +89,7 @@ export default function AppNavbar() {
           </div>
         </nav>
 
-        {/* Mobile Navbar */}
+        
         <div className="flex md:hidden items-center justify-between">
           <Link to="/" className="flex items-center gap-2 text-xl font-black font-heading text-white">
             <MapPin className="text-primary-500" /> Campus<span className="text-primary-500">Connect</span>

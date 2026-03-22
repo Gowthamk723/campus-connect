@@ -117,11 +117,9 @@ const PostItem = () => {
   return (
     <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 pt-28 min-h-screen transition-colors duration-300">
       
-      {/* Background Blobs for playful feel */}
       <div className="absolute top-0 right-0 w-80 h-80 bg-primary-200 dark:bg-primary-900/40 rounded-full mix-blend-multiply dark:mix-blend-lighten filter blur-[100px] opacity-60 animate-blob pointer-events-none"></div>
       <div className="absolute bottom-20 left-10 w-72 h-72 bg-purple-200 dark:bg-purple-900/40 rounded-full mix-blend-multiply dark:mix-blend-lighten filter blur-[100px] opacity-60 animate-blob animation-delay-2000 pointer-events-none"></div>
 
-      {/* Interactive Floating Toys */}
       <motion.div 
         drag 
         dragConstraints={{ left: -100, right: 100, top: -50, bottom: 50 }}

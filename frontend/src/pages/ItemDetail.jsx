@@ -46,7 +46,6 @@ const ItemDetail = () => {
         className="glass-heavy dark:glass-dark rounded-[2.5rem] overflow-hidden shadow-hard flex flex-col lg:flex-row border border-white/60 dark:border-gray-700/50 relative"
       >
         
-        {/* Subtle glow behind the image */}
         <div className="absolute top-1/2 left-1/4 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-primary-400/20 dark:bg-primary-900/30 rounded-full blur-[100px] pointer-events-none"></div>
 
         <div className="w-full lg:w-1/2 bg-gray-50/50 dark:bg-gray-900/50 flex items-center justify-center p-8 lg:p-12 lg:border-r border-gray-200 dark:border-gray-800 relative z-10 backdrop-blur-sm">

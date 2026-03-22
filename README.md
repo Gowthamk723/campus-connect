@@ -56,24 +56,25 @@ By leveraging a custom AI Image Captioning Model (BLIP), the platform automatica
 
 ### 1. Clone the Repository
 ```bash
-git clone [https://github.com/Gowthamk723/campus-connect.git](https://github.com/Gowthamk723/campus-connect.git)
+git clone [https://github.com/Gowthamk723/campus-connect.git]
 cd campus-connect
-2. Start the AI Service (Google Colab)
-Since the BLIP model runs on a free GPU to process images:
+```
+### 2. Start the AI Service (Google Colab)
+ * Since the BLIP model runs on a free GPU to process images:
 
-Open the BLIP Google Colab Notebook.
+ * Open the BLIP Google Colab Notebook.
 
-Go to Runtime → Change runtime type → Select T4 GPU.
+ * Go to Runtime → Change runtime type → Select T4 GPU.
 
-Run all cells.
+ * Run all cells.
 
-Copy the Ngrok Public URL generated (e.g., https://xxxx-xxxx.ngrok-free.app/analyze).
-Note: Keep the Colab tab open while using the app.
+ * Copy the Ngrok Public URL generated (e.g., https://xxxx-xxxx.ngrok-free.app/analyze).
+ * Note: Keep the Colab tab open while using the app.
 
-3. Backend Setup
+### 3. Backend Setup
 Open a new terminal and navigate to the backend directory:
 
-Bash
+```Bash
 cd backend
 python -m venv venv
 Activate the virtual environment:
@@ -81,14 +82,15 @@ Activate the virtual environment:
 Windows: venv\Scripts\activate
 
 Mac/Linux: source venv/bin/activate
-
+```
 Install dependencies and set up environment:
 
-Bash
+```Bash
 pip install -r requirements.txt
+```
 Create a .env file inside the /backend folder:
-
-Code snippet
+```Bash
+# Code snippet
 MONGO_URL=mongodb+srv://<username>:<password>@cluster0.xxxxx.mongodb.net
 DB_NAME=campus_connect_db
 SECRET_KEY=your_super_secret_key_here
@@ -96,49 +98,52 @@ ALGORITHM=HS256
 ACCESS_TOKEN_EXPIRE_MINUTES=30
 
 # Paste your Colab Ngrok URL here:
-COLAB_AI_URL=[https://xxxx-xxxx.ngrok-free.app/analyze](https://xxxx-xxxx.ngrok-free.app/analyze)
+COLAB_AI_URL=[https://xxxx-xxxx.ngrok-free.app/analyze]
 
 # Allow CORS for local frontend
 FRONTEND_URL=http://localhost:5173
+```
 Initialize Admin and Start Server:
 
-Bash
+```Bash
 python create_admin.py
 uvicorn app.main:app --reload
-Backend runs at: http://localhost:8000
-
-4. Frontend Setup
+# Backend runs at: http://localhost:8000
+```
+### 4. Frontend Setup
 Open a new terminal and navigate to the frontend directory:
 
-Bash
+```Bash
 cd frontend
 npm install
+```
 Create a .env file inside the /frontend folder:
-
-Code snippet
+```Bash
+# Code snippet
 VITE_API_URL=http://localhost:8000
+```
 Start the development server:
 
-Bash
+```Bash
 npm run dev
-Frontend runs at: http://localhost:5173
+# Frontend runs at: http://localhost:5173
+```
+### 👥 User Roles & Access
+## Regular User:
 
-👥 User Roles & Access
-Regular User:
+* Post lost/found items with AI assistance.
 
-Post lost/found items with AI assistance.
+* Chat privately with other users.
 
-Chat privately with other users.
+* Manage personal post history.
 
-Manage personal post history.
+## Admin:
 
-Admin:
+* Full moderation access (Delete any post).
 
-Full moderation access (Delete any post).
+* Monitor chat logs for safety.
 
-Monitor chat logs for safety.
-
-View system security logs.
+* View system security logs.
 
 Default Admin Credentials (if create_admin.py was run):
 
@@ -147,8 +152,8 @@ Email: admin@campusconnect.com
 Password: admin
 
 🚀 Roadmap & Future Improvements
-[ ] Replace polling chat with native WebSockets.
+* Replace polling chat with native WebSockets.
 
-[ ] Migrate BLIP model from Colab to a dedicated cloud GPU server.
+* Migrate BLIP model from Colab to a dedicated cloud GPU server.
 
-[ ] Implement automated AI-based image moderation for inappropriate content.
+* Implement automated AI-based image moderation for inappropriate content.

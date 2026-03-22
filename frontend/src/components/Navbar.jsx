@@ -31,7 +31,7 @@ const Navbar = () => {
   const isActive = (path) => location.pathname === path;
   const closeMenu = () => setIsOpen(false);
 
-  // Desktop Sidebar
+  
   if (!isMobile) {
     return (
       <motion.nav 
@@ -87,7 +87,6 @@ const Navbar = () => {
     );
   }
 
-  // Mobile Bottom Dock + Top Bar
   return (
     <>
       <nav className="fixed top-0 w-full z-40 glass border-b border-gray-200/50 dark:border-gray-800/50 px-4 h-16 flex items-center justify-between md:hidden">

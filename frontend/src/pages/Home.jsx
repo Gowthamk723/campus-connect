@@ -77,7 +77,7 @@ const Home = () => {
   return (
     <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pt-24 min-h-screen bg-black">
       
-      {/* Background Blobs */}
+
       <div className="absolute top-20 left-10 w-96 h-96 bg-primary-900 rounded-full mix-blend-screen filter blur-[100px] opacity-20 animate-blob pointer-events-none"></div>
       <div className="absolute top-40 right-10 w-96 h-96 bg-cyan-900 rounded-full mix-blend-screen filter blur-[100px] opacity-20 animate-blob animation-delay-2000 pointer-events-none"></div>
 
